@@ -45,6 +45,7 @@ import {
 } from '#/components/icons/BulletList'
 import {DotGrid3x1_Stroke2_Corner0_Rounded as EllipsisIcon} from '#/components/icons/DotGrid'
 import {EditBig_Stroke2_Corner0_Rounded as EditBig} from '#/components/icons/EditBig'
+import {Flame_Stroke2_Corner1_Rounded as Flame} from '#/components/icons/Flame'
 import {
   Hashtag_Filled_Corner0_Rounded as HashtagFilled,
   Hashtag_Stroke2_Corner0_Rounded as Hashtag,
@@ -725,6 +726,24 @@ export function DesktopLeftNav() {
               />
             }
             label={_(msg`Feeds`)}
+          />
+          <NavItem
+            href="/promotion"
+            icon={
+              <Flame
+                style={pal.text}
+                aria-hidden={true}
+                width={NAV_ICON_WIDTH}
+              />
+            }
+            iconFilled={
+              <Flame
+                style={pal.text}
+                aria-hidden={true}
+                width={NAV_ICON_WIDTH}
+              />
+            }
+            label={_(msg`Promotion`)}
           />
           <NavItem
             href="/lists"

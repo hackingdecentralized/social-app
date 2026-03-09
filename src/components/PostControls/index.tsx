@@ -27,6 +27,7 @@ import {
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useBreakpoints} from '#/alf'
 import {Reply as Bubble} from '#/components/icons/Reply'
+import {Zap_Stroke2_Corner0_Rounded as ZapIcon} from '#/components/icons/Zap'
 import {useFormatPostStatCount} from '#/components/PostControls/util'
 import * as Skele from '#/components/Skeleton'
 import {useAnalytics} from '#/analytics'
@@ -56,6 +57,7 @@ let PostControls = ({
   viaRepost,
   variant,
   forceGoogleTranslate = false,
+  onPressPromotion,
 }: {
   big?: boolean
   post: Shadow<AppBskyFeedDefs.PostView>
@@ -72,6 +74,7 @@ let PostControls = ({
   viaRepost?: {uri: string; cid: string}
   variant?: 'compact' | 'normal' | 'large'
   forceGoogleTranslate?: boolean
+  onPressPromotion?: () => void
 }): React.ReactNode => {
   const ax = useAnalytics()
   const {t: l} = useLingui()
@@ -297,6 +300,17 @@ let PostControls = ({
             />
           </PostControlButton>
         </View>
+        {onPressPromotion ? (
+          <View style={[a.flex_1, a.align_start]}>
+            <PostControlButton
+              testID="promotionBtn"
+              big={big}
+              onPress={() => requireAuth(() => onPressPromotion())}
+              label={l({message: `Simulate promotion spends`})}>
+              <PostControlButtonIcon icon={ZapIcon} />
+            </PostControlButton>
+          </View>
+        ) : null}
         {/* Spacer! */}
         <View />
       </View>

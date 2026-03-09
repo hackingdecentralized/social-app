@@ -26,6 +26,11 @@ export type PromotionServiceRecord = {
   status: 'active' | 'paused' | 'deprecated'
 }
 
+export type PromotionServiceMatch = PromotionServiceRecord & {
+  recordUri: string
+  repoDid: string
+}
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
@@ -123,13 +128,13 @@ export function toPromotionServiceRecord(
   }
 }
 
-export async function getPromotionServiceEndpointForFeed({
+export async function getPromotionServicesForFeed({
   agent,
   feedUri,
 }: {
   agent: BskyAgent
   feedUri: string
-}): Promise<string | null> {
+}): Promise<PromotionServiceMatch[]> {
   const normalizedFeedUri = normalizeAtUri(feedUri)
   let urip: AtUri
   try {
@@ -139,14 +144,14 @@ export async function getPromotionServiceEndpointForFeed({
       feedUri,
       message: err instanceof Error ? err.message : String(err),
     })
-    return null
+    return []
   }
   if (urip.collection !== 'app.bsky.feed.generator') {
     logger.debug('promotion service lookup: not a feed-generator URI', {
       feedUri: normalizedFeedUri,
       collection: urip.collection,
     })
-    return null
+    return []
   }
   const repoDid = await toDidHost(urip, agent)
   const repoPdsAgent = await createRepoPdsAgent({
@@ -159,6 +164,8 @@ export async function getPromotionServiceEndpointForFeed({
   let feedUriMismatches = 0
   let nonActiveMatches = 0
   let invalidEndpointMatches = 0
+  const matches: PromotionServiceMatch[] = []
+  const seenServiceEndpoints = new Set<string>()
 
   logger.debug('promotion service lookup: start', {
     feedUri,
@@ -209,11 +216,28 @@ export async function getPromotionServiceEndpointForFeed({
         recordUri: record.uri,
         serviceEndpoint: promotion.serviceEndpoint,
       })
-      return promotion.serviceEndpoint
+      if (seenServiceEndpoints.has(promotion.serviceEndpoint)) {
+        continue
+      }
+      seenServiceEndpoints.add(promotion.serviceEndpoint)
+      matches.push({
+        ...promotion,
+        recordUri: record.uri,
+        repoDid,
+      })
     }
 
     cursor = data.cursor
   } while (cursor)
+
+  if (matches.length > 0) {
+    logger.debug('promotion service lookup: matched providers', {
+      feedUri: normalizedFeedUri,
+      repoDid,
+      matchCount: matches.length,
+    })
+    return matches
+  }
 
   logger.debug('promotion service lookup: no match', {
     feedUri: normalizedFeedUri,
@@ -225,7 +249,18 @@ export async function getPromotionServiceEndpointForFeed({
     invalidEndpointMatches,
   })
 
-  return null
+  return []
+}
+
+export async function getPromotionServiceEndpointForFeed({
+  agent,
+  feedUri,
+}: {
+  agent: BskyAgent
+  feedUri: string
+}): Promise<string | null> {
+  const matches = await getPromotionServicesForFeed({agent, feedUri})
+  return matches[0]?.serviceEndpoint || null
 }
 
 export function parsePromotionFromFeedContext(

@@ -23,7 +23,10 @@ import {
   parsePromotionViewsResponse,
   parseTaskIdFromFeedContext,
 } from '#/lib/var/promotion'
-import {autoSpendPromotionReceipt} from '#/lib/var/promotion-service'
+import {
+  autoSpendPromotionReceipt,
+  simulatePromotionSpends,
+} from '#/lib/var/promotion-service'
 import {
   POST_TOMBSTONE,
   type Shadow,
@@ -380,6 +383,34 @@ let FeedItemInner = ({
     }
   }, [reason])
 
+  const onPressPromotion = useCallback(async () => {
+    if (!promotionServiceEndpoint || !promotionTaskId) return
+    console.log('new promotion: simulate spends start', {
+      postUri: post.uri,
+      taskId: promotionTaskId,
+      serviceUrl: promotionServiceEndpoint,
+    })
+    try {
+      const result = await simulatePromotionSpends({
+        serviceUrl: promotionServiceEndpoint,
+        taskId: promotionTaskId,
+      })
+      console.log('new promotion: simulate spends done', {
+        postUri: post.uri,
+        taskId: promotionTaskId,
+        serviceUrl: promotionServiceEndpoint,
+        result,
+      })
+    } catch (err) {
+      console.error('new promotion: simulate spends failed', {
+        postUri: post.uri,
+        taskId: promotionTaskId,
+        serviceUrl: promotionServiceEndpoint,
+        reason: err instanceof Error ? err.message : String(err),
+      })
+    }
+  }, [post.uri, promotionServiceEndpoint, promotionTaskId])
+
   return (
     <Link
       testID={`feedItem-by-${post.author.handle}`}
@@ -495,6 +526,13 @@ let FeedItemInner = ({
             threadgateRecord={threadgateRecord}
             onShowLess={onShowLess}
             viaRepost={viaRepost}
+            onPressPromotion={
+              isPromotion && promotionTaskId && promotionServiceEndpoint
+                ? () => {
+                    void onPressPromotion()
+                  }
+                : undefined
+            }
           />
         </View>
 

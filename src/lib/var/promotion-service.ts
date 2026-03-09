@@ -18,6 +18,97 @@ export type EncryptedReceiptResponse = {
   reused?: boolean
 }
 
+export type PromotionTask = {
+  taskId: string
+  postUri?: string
+  feedUri?: string
+  creatorDid?: string
+  createdAt?: string
+  [key: string]: unknown
+}
+
+export type PromotionPostViews = {
+  postUri: string
+  viewCount: number
+  taskCount?: number
+}
+
+export type PromotionTaskAuditMaterial = {
+  taskId: string
+  bundleSeedBase64: string
+  ppHashHex: string
+  ppBinBase64: string
+  verifierSecretKeyBase64: string
+  savedAt?: string
+}
+
+export type PromotionTaskValidationState = {
+  count: number
+  lastValidatedAt?: string
+}
+
+export type PromotionTaskValidationResult = {
+  commitments: {
+    epoch: number
+    count: number
+    receiptRoot: string
+    auditLimit: number
+  }
+  proof: {
+    epoch: number
+    proofBinUrl?: string
+    proofBinSha256?: string
+  }
+  verifyOut: {
+    ok: boolean
+    error: string | null
+    count: number
+    domainSize: number
+    kT: number
+  }
+  validationCount: number
+}
+
+export type CreatePromotionTaskPayload = {
+  postUri: string
+  feedUri: string
+  creatorDid: string
+  verifierPublicKeyBase64?: string
+  auditLimit?: number
+  targetViews?: number
+  metadata?: Record<string, unknown>
+  [key: string]: unknown
+}
+
+export type RegisteredUserKey = {
+  did: string
+  publicKey: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export type SetupPromotionTaskResult = {
+  taskId: string
+  userCount: number
+  domainSize: number
+  importedCount: number
+  ppHashHex: string
+  bundleSeedBase64: string
+  verifierPublicKeyBase64: string
+}
+
+export type PromotionTaskSetupStage =
+  | 'user-key-load-start'
+  | 'user-key-load-done'
+  | 'issue-token-start'
+  | 'issue-token-done'
+  | 'encrypt-start'
+  | 'encrypt-done'
+  | 'upload-public-params-start'
+  | 'upload-public-params-done'
+  | 'import-receipts-start'
+  | 'import-receipts-done'
+
 export function requestEncryptedReceipt(_args: {
   serviceUrl: string
   taskId: string
@@ -29,11 +120,105 @@ export function requestEncryptedReceipt(_args: {
   )
 }
 
+export function listPromotionTasks(_args: {
+  serviceUrl: string
+  creatorDid: string
+  accessJwt?: string
+}): Promise<{count: number; tasks: PromotionTask[]}> {
+  return Promise.reject(
+    new Error('listPromotionTasks is only implemented on web'),
+  )
+}
+
+export function getPromotionPostViews(_args: {
+  serviceUrl: string
+  postUri: string
+}): Promise<PromotionPostViews> {
+  return Promise.reject(
+    new Error('getPromotionPostViews is only implemented on web'),
+  )
+}
+
+export function getPromotionTaskAuditMaterial(_args: {
+  ownerDid: string
+  taskId: string
+}): PromotionTaskAuditMaterial | null {
+  return null
+}
+
+export function getPromotionTaskValidationState(_args: {
+  ownerDid: string
+  taskId: string
+}): PromotionTaskValidationState {
+  return {count: 0}
+}
+
+export function validatePromotionTaskProof(_args: {
+  serviceUrl: string
+  ownerDid: string
+  taskId: string
+}): Promise<PromotionTaskValidationResult> {
+  return Promise.reject(
+    new Error('validatePromotionTaskProof is only implemented on web'),
+  )
+}
+
+export function getRegisteredUserCount(_args: {
+  serviceUrl: string
+}): Promise<number | null> {
+  return Promise.reject(
+    new Error('getRegisteredUserCount is only implemented on web'),
+  )
+}
+
+export function listRegisteredUserKeys(_args: {
+  serviceUrl: string
+  order?: 'asc' | 'desc'
+  limit?: number
+  offset?: number
+}): Promise<{
+  order: 'asc' | 'desc'
+  limit: number
+  offset: number
+  totalRegistered: number
+  count: number
+  keys: RegisteredUserKey[]
+}> {
+  return Promise.reject(
+    new Error('listRegisteredUserKeys is only implemented on web'),
+  )
+}
+
+export function createPromotionTask(_args: {
+  serviceUrl: string
+  payload: CreatePromotionTaskPayload
+  accessJwt?: string
+}): Promise<{taskId: string; createdAt?: string}> {
+  return Promise.reject(
+    new Error('createPromotionTask is only implemented on web'),
+  )
+}
+
+export function setupPromotionTaskIssueChain(_args: {
+  serviceUrl: string
+  creatorDid: string
+  taskId: string
+  verifierDid: string
+  expectedVerifierPublicKeyBase64: string
+  accessJwt?: string
+  onStage?: (stage: PromotionTaskSetupStage) => void
+}): Promise<SetupPromotionTaskResult> {
+  return Promise.reject(
+    new Error('setupPromotionTaskIssueChain is only implemented on web'),
+  )
+}
+
 export function spendEncryptedReceipt(_args: {
   serviceUrl: string
   taskId: string
   spenderDid: string
   receipt: string | Record<string, unknown>
+  epoch?: number
   accessJwt?: string
 }): Promise<{
   taskId: string
@@ -44,6 +229,16 @@ export function spendEncryptedReceipt(_args: {
 }> {
   return Promise.reject(
     new Error('spendEncryptedReceipt is only implemented on web'),
+  )
+}
+
+export function simulatePromotionSpends(_args: {
+  serviceUrl: string
+  taskId: string
+  accessJwt?: string
+}): Promise<unknown> {
+  return Promise.reject(
+    new Error('simulatePromotionSpends is only implemented on web'),
   )
 }
 

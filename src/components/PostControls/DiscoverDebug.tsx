@@ -10,6 +10,15 @@ import {Text} from '#/components/Typography'
 import {useAnalytics} from '#/analytics'
 import {IS_INTERNAL} from '#/env'
 
+function isPromotionFeedContext(feedContext: string): boolean {
+  try {
+    const parsed = JSON.parse(feedContext) as Record<string, unknown>
+    return parsed.promotion === true
+  } catch {
+    return false
+  }
+}
+
 export function DiscoverDebug({
   feedContext,
 }: {
@@ -21,10 +30,14 @@ export function DiscoverDebug({
     IS_INTERNAL ||
     DISCOVER_DEBUG_DIDS[currentAccount?.did || ''] ||
     ax.features.enabled(ax.features.DebugFeedContext)
+  const hiddenByPromotion = Boolean(
+    feedContext && isPromotionFeedContext(feedContext),
+  )
   const theme = useTheme()
 
   return (
     isDiscoverDebugUser &&
+    !hiddenByPromotion &&
     feedContext && (
       <Pressable
         accessible={false}

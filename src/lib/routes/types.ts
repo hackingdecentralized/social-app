@@ -77,6 +77,9 @@ export type CommonNavigatorParams = {
   NotificationsActivityList: {posts: string}
   LegacyNotificationSettings: undefined
   Feeds: undefined
+  Promotion: undefined
+  PromotionSettings: undefined
+  NewPromotion: undefined
   Start: {name: string; rkey: string}
   StarterPack: {name: string; rkey: string; new?: boolean}
   StarterPackShort: {code: string}
@@ -123,6 +126,9 @@ export type FlatNavigatorParams = CommonNavigatorParams & {
   Home: undefined
   Search: {q?: string; tab?: 'user' | 'profile' | 'feed'}
   Feeds: undefined
+  Promotion: undefined
+  PromotionSettings: undefined
+  NewPromotion: undefined
   Notifications: undefined
   Messages: {pushToConversation?: string; animation?: 'push' | 'pop'}
 }
@@ -133,6 +139,9 @@ export type AllNavigatorParams = CommonNavigatorParams & {
   SearchTab: undefined
   Search: {q?: string; tab?: 'user' | 'profile' | 'feed'}
   Feeds: undefined
+  Promotion: undefined
+  PromotionSettings: undefined
+  NewPromotion: undefined
   NotificationsTab: undefined
   Notifications: undefined
   MyProfileTab: undefined

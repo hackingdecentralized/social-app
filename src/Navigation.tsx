@@ -60,12 +60,15 @@ import {ListsScreen} from '#/view/screens/Lists'
 import {ModerationBlockedAccounts} from '#/view/screens/ModerationBlockedAccounts'
 import {ModerationModlistsScreen} from '#/view/screens/ModerationModlists'
 import {ModerationMutedAccounts} from '#/view/screens/ModerationMutedAccounts'
+import {NewPromotionScreen} from '#/view/screens/NewPromotion'
 import {NotFoundScreen} from '#/view/screens/NotFound'
 import {NotificationsScreen} from '#/view/screens/Notifications'
 import {PostThreadScreen} from '#/view/screens/PostThread'
 import {PrivacyPolicyScreen} from '#/view/screens/PrivacyPolicy'
 import {ProfileScreen} from '#/view/screens/Profile'
 import {ProfileFeedLikedByScreen} from '#/view/screens/ProfileFeedLikedBy'
+import {PromotionScreen} from '#/view/screens/Promotion'
+import {PromotionSettingsScreen} from '#/view/screens/PromotionSettings'
 import {StorybookScreen} from '#/view/screens/Storybook'
 import {SupportScreen} from '#/view/screens/Support'
 import {TermsOfServiceScreen} from '#/view/screens/TermsOfService'
@@ -583,6 +586,21 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         name="Feeds"
         getComponent={() => FeedsScreen}
         options={{title: title(msg`Feeds`)}}
+      />
+      <Stack.Screen
+        name="Promotion"
+        getComponent={() => PromotionScreen}
+        options={{title: title(msg`Promotion`), requireAuth: true}}
+      />
+      <Stack.Screen
+        name="PromotionSettings"
+        getComponent={() => PromotionSettingsScreen}
+        options={{title: title(msg`Promotion settings`), requireAuth: true}}
+      />
+      <Stack.Screen
+        name="NewPromotion"
+        getComponent={() => NewPromotionScreen}
+        options={{title: title(msg`New Promotion`), requireAuth: true}}
       />
       <Stack.Screen
         name="StarterPack"
