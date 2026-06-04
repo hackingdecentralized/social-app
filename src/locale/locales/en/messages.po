@@ -1085,7 +1085,7 @@ msgstr ""
 msgid "Add App Password"
 msgstr ""
 
-#: src/screens/Settings/AutomationLabelSettings.tsx:166
+#: src/screens/Settings/AutomationLabelSettings.tsx:170
 msgid "Add automation label to account"
 msgstr "Add automation label to account"
 
@@ -4299,7 +4299,7 @@ msgstr ""
 msgid "Exit fullscreen"
 msgstr ""
 
-#: src/components/Lightbox/chrome/Footer.tsx:65
+#: src/components/Lightbox/chrome/Footer.tsx:59
 #: src/components/Lightbox/Lightbox.web.tsx:241
 msgid "Expand alt text"
 msgstr ""
@@ -10317,8 +10317,8 @@ msgstr ""
 msgid "Show anyway"
 msgstr ""
 
-#: src/screens/Settings/AutomationLabelSettings.tsx:181
-#: src/screens/Settings/AutomationLabelSettings.tsx:194
+#: src/screens/Settings/AutomationLabelSettings.tsx:185
+#: src/screens/Settings/AutomationLabelSettings.tsx:198
 msgid "Show automation label"
 msgstr "Show automation label"
 
@@ -11561,7 +11561,7 @@ msgstr ""
 msgid "This is not a valid link"
 msgstr ""
 
-#: src/screens/Settings/AutomationLabelSettings.tsx:169
+#: src/screens/Settings/AutomationLabelSettings.tsx:173
 msgid "This label lets the world know that this account is automated. If turned on, this label appears next to the account's name on their profile and posts. It can be turned on or off at any time."
 msgstr "This label lets the world know that this account is automated. If turned on, this label appears next to the account's name on their profile and posts. It can be turned on or off at any time."
 
